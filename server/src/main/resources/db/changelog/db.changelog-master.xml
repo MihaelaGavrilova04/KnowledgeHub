@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <include file="db/changelog/v1__create_users_table.xml"/>
+    <include file="db/changelog/v2__create_categories_table.xml"/>
+    <include file="db/changelog/v3__create_content_items_table.xml"/>
+    <include file="db/changelog/v4__create_content_categories_table.xml"/>
+    <include file="db/changelog/v5__create_reading_lists_table.xml"/>
+    <include file="db/changelog/v6__create_reading_list_items_table.xml"/>
+    <include file="db/changelog/v7__create_bookmarks_table.xml"/>
+    <include file="db/changelog/v8__create_comments_table.xml"/>
+    <include file="db/changelog/v9__create_content_ratings_table.xml"/>
+    <include file="db/changelog/v10__create_annotations_table.xml"/>
+
+</databaseChangeLog>

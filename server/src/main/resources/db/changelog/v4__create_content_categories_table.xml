@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="4" author="knowledgehub">
+        <createTable tableName="content_categories">
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_cc_content"
+                             references="content_items(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="category_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_cc_category"
+                             references="categories(id)"
+                             deleteCascade="true"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="content_categories"
+                       columnNames="content_id, category_id"/>
+    </changeSet>
+
+</databaseChangeLog>

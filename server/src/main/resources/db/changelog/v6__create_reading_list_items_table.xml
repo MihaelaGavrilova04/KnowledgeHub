@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="6" author="knowledgehub">
+        <createTable tableName="reading_list_items">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="list_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_rli_list"
+                             references="reading_lists(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_rli_content"
+                             references="content_items(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="progress_percent" type="DOUBLE" defaultValueNumeric="0.0"/>
+        </createTable>
+
+        <createIndex tableName="reading_list_items" indexName="idx_rli_list">
+            <column name="list_id"/>
+        </createIndex>
+
+        <createIndex tableName="reading_list_items" indexName="idx_rli_content">
+            <column name="content_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

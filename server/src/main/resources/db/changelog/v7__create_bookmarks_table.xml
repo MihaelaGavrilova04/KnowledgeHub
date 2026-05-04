@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="7" author="knowledgehub">
+        <createTable tableName="bookmarks">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_bookmark_user"
+                             references="users(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_bookmark_content"
+                             references="content_items(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="page_number" type="INTEGER" defaultValueNumeric="1"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addPrimaryKey tableName="bookmarks"
+                       columnNames="user_id, content_id"/>
+    </changeSet>
+
+</databaseChangeLog>
