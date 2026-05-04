@@ -1,6 +1,14 @@
 package com.library.model.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,17 +26,22 @@ import java.util.UUID;
 @Builder
 public class ContentItem {
 
+    public static final int TITLE_MAX_LENGTH = 500;
+    public static final int CONTENT_TYPE_MAX_LENGTH = 20;
+    public static final int URL_MAX_LENGTH = 500;
+    public static final int LANGUAGE_MAX_LENGTH = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = TITLE_MAX_LENGTH)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "content_type", nullable = false, length = 20)
+    @Column(name = "content_type", nullable = false, length = CONTENT_TYPE_MAX_LENGTH)
     private String contentType;  // "ARTICLE", "RESEARCH", "PDF"
 
     @Column(name = "author_id", nullable = false)
@@ -38,13 +51,13 @@ public class ContentItem {
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private User author;
 
-    @Column(name = "file_url", length = 500)
+    @Column(name = "file_url", length = URL_MAX_LENGTH)
     private String fileUrl;
 
-    @Column(name = "cover_url", length = 500)
+    @Column(name = "cover_url", length = URL_MAX_LENGTH)
     private String coverUrl;
 
-    @Column(length = 10)
+    @Column(length = LANGUAGE_MAX_LENGTH)
     private String language;
 
     @Column(columnDefinition = "INTEGER DEFAULT 1")
