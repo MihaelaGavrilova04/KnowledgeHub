@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="10" author="knowledgehub">
+        <createTable tableName="annotations">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_annotation_user"
+                             references="users(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_annotation_content"
+                             references="content_items(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="range_start" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="range_end" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note_text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <createIndex tableName="annotations" indexName="idx_annotation_content">
+            <column name="content_id"/>
+        </createIndex>
+
+        <createIndex tableName="annotations" indexName="idx_annotation_user">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

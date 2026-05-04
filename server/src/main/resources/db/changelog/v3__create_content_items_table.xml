@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="3" author="knowledgehub">
+        <createTable tableName="content_items">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="content_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_content_items_author"
+                             references="users(id)"
+                             deleteCascade="false"/>
+            </column>
+            <column name="file_url" type="VARCHAR(500)"/>
+            <column name="cover_url" type="VARCHAR(500)"/>
+            <column name="language" type="VARCHAR(10)"/>
+            <column name="version" type="INTEGER" defaultValueNumeric="1"/>
+            <column name="is_published" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="views" type="BIGINT" defaultValueNumeric="0"/>
+            <column name="uploaded_by" type="UUID">
+                <constraints foreignKeyName="fk_content_items_uploader"
+                             references="users(id)"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <createIndex tableName="content_items" indexName="idx_content_title">
+            <column name="title"/>
+        </createIndex>
+
+        <createIndex tableName="content_items" indexName="idx_content_type">
+            <column name="content_type"/>
+        </createIndex>
+
+        <createIndex tableName="content_items" indexName="idx_content_author">
+            <column name="author_id"/>
+        </createIndex>
+
+        <createIndex tableName="content_items" indexName="idx_content_published">
+            <column name="is_published"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

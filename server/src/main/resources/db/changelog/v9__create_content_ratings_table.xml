@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="9" author="knowledgehub">
+        <createTable tableName="content_ratings">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_rating_user"
+                             references="users(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="content_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_rating_content"
+                             references="content_items(id)"
+                             deleteCascade="true"/>
+            </column>
+            <column name="rating_value" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addPrimaryKey tableName="content_ratings"
+                       columnNames="user_id, content_id"/>
+    </changeSet>
+
+    <changeSet id="9-constraint" author="knowledgehub">
+        <sql>
+            ALTER TABLE content_ratings
+            ADD CONSTRAINT chk_rating_value
+            CHECK (rating_value BETWEEN 1 AND 5);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
