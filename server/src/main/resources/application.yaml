@@ -25,13 +25,6 @@ spring:
               - email
               - profile
 
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG
-    org.springframework.security.oauth2.client: DEBUG
-    org.springframework.web: DEBUG
-
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}

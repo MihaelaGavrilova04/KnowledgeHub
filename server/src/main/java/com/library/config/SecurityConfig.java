@@ -12,19 +12,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .defaultSuccessUrl("/dashboard", true)
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/")
-                        .permitAll()
-                );
-
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/", "/home").permitAll().anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/dashboard", true))
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
         return http.build();
     }
 }
