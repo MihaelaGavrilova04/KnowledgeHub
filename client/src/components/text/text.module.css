@@ -1,0 +1,17 @@
+.text {
+  color: var(--main-dark-color);
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  font-weight: var(--font-weight-regular);
+  line-height: normal;
+  font-style: normal;
+  margin: 0px;
+}
+
+.semi-bold {
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.small {
+  font-size: var(--body-small-size-font);
+}

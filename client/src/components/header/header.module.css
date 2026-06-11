@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--padding-l);
+  height: 60px;
+  background-color: var(--main-dark-color);
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: var(--heading-family-font);
+  font-size: var(--h2-size-font);
+  font-weight: var(--heading-weight-font);
+  color: var(--primary-accent-color);
+  text-decoration: none;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-m);
+}
+
+.navLink {
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-light-color);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--primary-accent-color);
+}
+
+.userName {
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-light-color);
+}
+
+.user .logoutBtn {
+  color: var(--main-light-color);
+}
+
+.user .logoutBtn:hover {
+  color: var(--primary-accent-color);
+}
