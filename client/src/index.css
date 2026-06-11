@@ -1,0 +1,86 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+:root {
+  /* Main Colors */
+  --main-dark-color: #20242c;
+  --main-placeholder-color: #949dad;
+  --main-light-color: #f9f9f9;
+  --main-light-blur-50-color: rgba(249, 249, 249, 0.5);
+  --main-shadow-color: rgba(32, 36, 44, 0.1);
+
+  /* Accent Colors */
+  --primary-accent-color: #64b397;
+  --secondary-accent-color: #5790a7;
+
+  /* Status Colors */
+  --status-success-color: #adc168;
+  --status-warning-color: #fbc544;
+  --status-error-color: #b34f4c;
+
+  /* Heading Typography */
+  --heading-family-font: 'Titillium Web', sans-serif;
+  --heading-weight-font: 600;
+  --h1-size-font: 1.5rem;
+  --h2-size-font: 1.25rem;
+  --h3-size-font: 1.125rem;
+
+  /* Body Typography */
+  --body-family-font: 'Montserrat', sans-serif;
+  --body-weight-font: 400;
+  --body-bold-weight-font: 600;
+  --body-size-font: 1rem;
+  --body-small-size-font: 0.75rem;
+
+  --font-weight-regular: 400;
+  --font-weight-semi-bold: 600;
+
+  /* Spacing */
+  --gap-xs: 0.5rem;
+  --gap-s: 0.75rem;
+  --gap-m: 1rem;
+  --gap-l: 1.25rem;
+  --gap-xl: 1.5rem;
+  --gap-2xl: 2rem;
+  --label-gap: 0.5rem;
+
+  --padding-xs: 0.5rem;
+  --padding-s: 0.75rem;
+  --padding-m: 1rem;
+  --padding-l: 2rem;
+  --padding-xl: 4rem;
+
+  --margin-s: 0.75rem;
+  --margin-m: 1rem;
+  --margin-l: 1.5rem;
+  --margin-xl: 2rem;
+  --margin-2xl: 4rem;
+
+  --border-radius-standard: 8px;
+  --border-radius-small: 4px;
+
+  --profile-image-dimension: 100px;
+  --item-image-dimension: 64px;
+
+  /* Line height */
+  --line-height: 1.25;
+
+  --transition-speed: 250ms;
+  --transition-timing: ease;
+
+  --z-index-behind: -1;
+  --z-index-tooltip: 1;
+  --z-index-menu: 2;
+  --z-index-modal: 3;
+}
