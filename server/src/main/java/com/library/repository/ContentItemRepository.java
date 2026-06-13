@@ -12,6 +12,10 @@ import java.util.UUID;
 
 public interface ContentItemRepository extends JpaRepository<ContentItem, UUID> {
 
+    List<ContentItem> findByIsPublishedTrueOrderByCreatedAtDesc();
+
+    List<ContentItem> findByTitleContainingIgnoreCaseAndIsPublishedTrue(String title);
+
     Page<ContentItem> findByIsPublishedTrue(Pageable pageable);
 
     @Query("SELECT c FROM ContentItem c WHERE c.isPublished = true "
