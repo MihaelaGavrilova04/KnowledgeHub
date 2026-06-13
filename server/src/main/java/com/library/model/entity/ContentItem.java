@@ -54,6 +54,9 @@ public class ContentItem {
     @Column(name = "file_url", length = URL_MAX_LENGTH)
     private String fileUrl;
 
+    @Column(name = "minio_key", length = URL_MAX_LENGTH)
+    private String minioKey;
+
     @Column(name = "cover_url", length = URL_MAX_LENGTH)
     private String coverUrl;
 
