@@ -24,6 +24,17 @@ services:
     volumes:
       - minio-data:/data
 
+  createbuckets:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    environment:
+      MC_HOST_local: http://${MINIO_ACCESS_KEY}:${MINIO_SECRET_KEY}@minio:9000
+    entrypoint:
+      - /bin/sh
+      - -c
+      - "until mc ls local/ > /dev/null 2>&1; do echo 'Waiting for MinIO...'; sleep 2; done && mc mb --ignore-existing local/digital-library && echo 'Bucket ready.'"
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: knowledge-pgadmin
