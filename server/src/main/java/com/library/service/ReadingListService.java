@@ -42,7 +42,7 @@ public class ReadingListService {
     public List<ContentItemResponse> getItems(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         ReadingList list = getOrCreateList(user);
-        return readingListItemRepository.findByList_Id(list.getId()).stream()
+        return readingListItemRepository.findByListId(list.getId()).stream()
                 .map(item -> ContentItemResponse.from(item.getContent()))
                 .toList();
     }
@@ -51,7 +51,7 @@ public class ReadingListService {
     public void addItem(String email, UUID contentId) {
         User user = userRepository.findByEmail(email).orElseThrow();
         ReadingList list = getOrCreateList(user);
-        if (readingListItemRepository.existsByList_IdAndContent_Id(list.getId(), contentId)) {
+        if (readingListItemRepository.existsByListIdAndContentId(list.getId(), contentId)) {
             return;
         }
         ContentItem content = contentItemRepository.findById(contentId).orElseThrow();
@@ -62,7 +62,7 @@ public class ReadingListService {
     public void removeItem(String email, UUID contentId) {
         User user = userRepository.findByEmail(email).orElseThrow();
         ReadingList list = getOrCreateList(user);
-        readingListItemRepository.findByList_IdAndContent_Id(list.getId(), contentId)
+        readingListItemRepository.findByListIdAndContentId(list.getId(), contentId)
                 .ifPresent(readingListItemRepository::delete);
     }
 

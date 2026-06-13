@@ -9,9 +9,9 @@ import java.util.UUID;
 
 public interface ReadingListItemRepository extends JpaRepository<ReadingListItem, UUID> {
 
-    List<ReadingListItem> findByList_Id(UUID listId);
+    List<ReadingListItem> findByListId(UUID listId);
 
-    Optional<ReadingListItem> findByList_IdAndContent_Id(UUID listId, UUID contentId);
+    Optional<ReadingListItem> findByListIdAndContentId(UUID listId, UUID contentId);
 
-    boolean existsByList_IdAndContent_Id(UUID listId, UUID contentId);
+    boolean existsByListIdAndContentId(UUID listId, UUID contentId);
 }
