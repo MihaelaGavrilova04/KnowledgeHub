@@ -1,0 +1,42 @@
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--main-light-color);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-xl);
+  padding: var(--padding-l);
+  background: white;
+  border-radius: var(--border-radius-standard);
+  box-shadow: 0 0.25rem 0.75rem var(--main-shadow-color);
+  min-width: 320px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--heading-family-font);
+  font-size: var(--h1-size-font);
+  font-weight: var(--heading-weight-font);
+  color: var(--main-dark-color);
+}
+
+.subtitle {
+  margin: 0;
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-placeholder-color);
+}
+
+.error {
+  margin: 0;
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: #d9534f;
+  text-align: center;
+}
