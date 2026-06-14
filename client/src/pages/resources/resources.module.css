@@ -1,0 +1,106 @@
+.container {
+  padding: var(--padding-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+}
+
+.toolbar {
+  display: flex;
+  gap: var(--gap-m);
+  align-items: center;
+}
+
+.search {
+  flex: 1;
+  padding: var(--padding-xs) var(--padding-s);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-small);
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-dark-color);
+  outline: none;
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  padding: var(--padding-m);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-standard);
+  background: var(--main-light-color);
+}
+
+.input {
+  padding: var(--padding-xs) var(--padding-s);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-small);
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-dark-color);
+  outline: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gap-l);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  padding: var(--padding-m);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-standard);
+  background: white;
+}
+
+.cardHeader {
+  display: flex;
+  gap: var(--gap-xs);
+}
+
+.type {
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  font-weight: var(--font-weight-semi-bold);
+  color: var(--primary-accent-color);
+  text-transform: uppercase;
+}
+
+.lang {
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  color: var(--main-placeholder-color);
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--heading-family-font);
+  font-size: var(--h3-size-font);
+  color: var(--main-dark-color);
+}
+
+.author {
+  margin: 0;
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  color: var(--main-placeholder-color);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--body-family-font);
+  font-size: var(--body-size-font);
+  color: var(--main-dark-color);
+}
+
+.actions {
+  display: flex;
+  gap: var(--gap-xs);
+  margin-top: auto;
+  padding-top: var(--gap-s);
+}
