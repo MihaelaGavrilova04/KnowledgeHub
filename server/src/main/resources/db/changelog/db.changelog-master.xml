@@ -16,5 +16,6 @@
     <include file="db/changelog/v9__create_content_ratings_table.xml"/>
     <include file="db/changelog/v10__create_annotations_table.xml"/>
     <include file="db/changelog/v11__add_minio_key_to_content_items.xml"/>
+    <include file="db/changelog/v12__create_annotation_comments_table.xml"/>
 
 </databaseChangeLog>
