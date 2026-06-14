@@ -15,3 +15,10 @@
 .small {
   font-size: var(--body-small-size-font);
 }
+
+.placeholder {
+  height: 1em;
+  background-color: var(--main-placeholder-color);
+  border-radius: var(--border-radius-small);
+  opacity: 0.3;
+}
