@@ -2,6 +2,10 @@ import type { ReactNode } from 'react'
 import styles from './text.module.css'
 import clsx from 'clsx'
 
+function TextPlaceholder({ className }: { className?: string }) {
+  return <p className={clsx(styles.text, styles.placeholder, className)} />
+}
+
 interface BaseTextProps {
   className?: string
 }

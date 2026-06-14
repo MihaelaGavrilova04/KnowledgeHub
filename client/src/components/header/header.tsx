@@ -21,7 +21,7 @@ export function Header({ className }: HeaderProps) {
         <div className={styles.user}>
           <Link to="/reading-list" className={styles.navLink}>My List</Link>
           <span className={styles.userName}>{user.name}</span>
-          <Button variant="ghost" icon="logout" onClick={logout} className={styles.logoutBtn}>
+          <Button variant="ghost" onClick={logout} className={styles.logoutBtn}>
             Logout
           </Button>
         </div>
