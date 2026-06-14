@@ -54,10 +54,11 @@ public class ResourceController {
             @RequestPart MultipartFile file,
             @RequestParam String title,
             @RequestParam(required = false) String description,
+            @RequestParam(required = false, defaultValue = "OTHER") String contentType,
             Authentication authentication) {
         UUID uploaderId = getUserId(authentication);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(resourceService.upload(file, title, description, uploaderId));
+                .body(resourceService.upload(file, title, description, contentType, uploaderId));
     }
 
     @GetMapping("/{id}/download")

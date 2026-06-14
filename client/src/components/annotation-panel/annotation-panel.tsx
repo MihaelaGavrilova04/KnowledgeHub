@@ -48,7 +48,7 @@ export function AnnotationPanel({ contentId, onClose }: Props) {
   async function handleAddNote() {
     if (!note.trim()) return
     try {
-      await api.post(`/api/annotations/${contentId}`, { noteText: note })
+      await api.post('/api/annotations', { contentId, noteText: note })
       setNote('')
       setError(null)
       loadAnnotations()
