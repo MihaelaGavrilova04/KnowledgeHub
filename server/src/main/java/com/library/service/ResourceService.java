@@ -65,7 +65,8 @@ public class ResourceService {
     }
 
     @Transactional
-    public ResourceResponse upload(MultipartFile file, String title, String description, UUID uploaderId) {
+    public ResourceResponse upload(MultipartFile file, String title, String description,
+                                   String contentType, UUID uploaderId) {
         validateFile(file);
         String key = uploaderId + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
         try {
@@ -82,7 +83,7 @@ public class ResourceService {
         ContentItem item = ContentItem.builder()
                 .title(title)
                 .description(description)
-                .contentType(file.getContentType())
+                .contentType(contentType)
                 .authorId(uploaderId)
                 .uploadedBy(uploaderId)
                 .minioKey(key)
