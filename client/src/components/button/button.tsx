@@ -1,7 +1,5 @@
 import type { ComponentProps } from 'react'
 import clsx from 'clsx'
-import { Icon } from '../icons/icon'
-import type { IconType } from '../icons/all-icons'
 import styles from './button.module.css'
 
 type ButtonComponent = keyof React.JSX.IntrinsicElements | React.JSXElementConstructor<any>
@@ -9,7 +7,6 @@ type ButtonComponent = keyof React.JSX.IntrinsicElements | React.JSXElementConst
 type ButtonProps<T extends ButtonComponent = 'button'> = Omit<ComponentProps<T>, never> & {
   component?: T
   variant?: 'filled' | 'outlined' | 'ghost'
-  icon?: IconType
   isLoading?: boolean
 }
 
@@ -28,7 +25,6 @@ export function Button<T extends ButtonComponent>({
   variant = 'filled',
   className,
   children,
-  icon,
   isLoading = false,
   ...props
 }: ButtonProps<T>) {
@@ -38,19 +34,9 @@ export function Button<T extends ButtonComponent>({
     <Component
       className={clsx(styles.button, variantStyles[variant], className)}
       {...props}
-      style={{
-        ...((!icon || isLoading) && { paddingLeft: '16px', lineHeight: '32px' }),
-        ...(!children && { paddingRight: '6px' }),
-      }}
+      style={{ paddingLeft: '16px', lineHeight: '32px' }}
     >
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          {icon && <Icon type={icon} />}
-          {children}
-        </>
-      )}
+      {isLoading ? <Loader /> : children}
     </Component>
   )
 }
