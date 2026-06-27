@@ -2,41 +2,25 @@ package com.library.controller;
 
 import com.library.model.dto.GoogleAuthRequest;
 import com.library.model.dto.UserResponse;
-import com.library.model.entity.User;
-import com.library.repository.UserRepository;
-import com.library.security.JwtUtil;
-import com.library.service.GoogleAuthService;
+import com.library.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private static final int COOKIE_MAX_AGE_SECONDS = 86400;
-
     private static final String AUTH_COOKIE_NAME = "AUTH_TOKEN";
 
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
-    private final GoogleAuthService googleAuthService;
-
-    private final JwtUtil jwtUtil;
-
-    public AuthController(UserRepository userRepository,
-                          GoogleAuthService googleAuthService,
-                          JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.googleAuthService = googleAuthService;
-        this.jwtUtil = jwtUtil;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @GetMapping("/me")
@@ -44,17 +28,17 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
-        return ResponseEntity.ok(UserResponse.from(user));
+
+        UserResponse response = authService.getCurrentUser(authentication.getName());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/google")
-    public ResponseEntity<UserResponse> googleLogin(@RequestBody GoogleAuthRequest request,
-                                                    HttpServletResponse response) {
-        User user = googleAuthService.authenticate(request.getIdToken());
-        String token = jwtUtil.generate(user.getId(), user.getEmail());
-        response.addCookie(createAuthCookie(token));
-        return ResponseEntity.ok(UserResponse.from(user));
+    public ResponseEntity<Void> googleLogin(@RequestBody GoogleAuthRequest request,
+                                            HttpServletResponse response) {
+        String jwtToken = authService.loginWithGoogleAndGetToken(request.getIdToken());
+        response.addCookie(createAuthCookie(jwtToken));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/logout")
