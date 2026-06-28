@@ -16,27 +16,43 @@ interface ContentItem {
   uploaderName: string | null
 }
 
+const TYPES = [
+  { value: 'ARTICLE', label: 'Article' },
+  { value: 'RESEARCH', label: 'Research' },
+  { value: 'application/pdf', label: 'PDF' },
+]
+
 export function ResourcesPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const search = searchParams.get('search') ?? ''
+  const [selectedType, setSelectedType] = useState<string | null>(null)
   const [annotatingId, setAnnotatingId] = useState<string | null>(null)
   const [showUpload, setShowUpload] = useState(false)
   const [uploadTitle, setUploadTitle] = useState('')
   const [uploadDesc, setUploadDesc] = useState('')
   const [uploadType, setUploadType] = useState('ARTICLE')
   const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const debouncedSearch = useDebounce(search)
 
+  function buildUrl() {
+    const params = new URLSearchParams()
+    if (debouncedSearch) params.set('keyword', debouncedSearch)
+    if (selectedType) params.set('contentType', selectedType)
+    const query = params.toString()
+    return query ? `/api/resources?${query}` : '/api/resources'
+  }
+
   const { data, reload } = useAsync<{ content: ContentItem[] }>(
-    () => api.get<{ content: ContentItem[] }>(
-      debouncedSearch
-        ? `/api/resources?keyword=${encodeURIComponent(debouncedSearch)}`
-        : '/api/resources',
-    ),
-    [debouncedSearch],
+    () => api.get<{ content: ContentItem[] }>(buildUrl()),
+    [debouncedSearch, selectedType],
   )
   const items = data?.content ?? []
+
+  const { data: recs = [] } = useAsync<ContentItem[]>(
+    () => api.get<ContentItem[]>('/api/recommendations'),
+  )
 
   async function handleUpload() {
     if (!uploadFile || !uploadTitle) return
@@ -54,12 +70,17 @@ export function ResourcesPage() {
   }
 
   async function openFile(id: string) {
-    const data = await api.get<{ url: string }>(`/api/resources/${id}/download`)
-    window.open(data.url, '_blank')
+    const res = await api.get<{ url: string }>(`/api/resources/${id}/download`)
+    window.open(res.url, '_blank')
   }
 
   async function saveToList(id: string) {
-    await api.post('/api/reading-list/items', { contentId: id })
+    try {
+      await api.post('/api/reading-list/items', { contentId: id })
+      setSaveError(null)
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : 'Could not save to list')
+    }
   }
 
   return (
@@ -75,6 +96,24 @@ export function ResourcesPage() {
           <Button variant="outlined" onClick={() => setShowUpload(!showUpload)}>
             Upload
           </Button>
+        </div>
+
+        <div className={styles.filters}>
+          <button
+            className={selectedType === null ? styles.filterActive : styles.filter}
+            onClick={() => setSelectedType(null)}
+          >
+            All
+          </button>
+          {TYPES.map((t) => (
+            <button
+              key={t.value}
+              className={selectedType === t.value ? styles.filterActive : styles.filter}
+              onClick={() => setSelectedType(selectedType === t.value ? null : t.value)}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
         {showUpload && (
@@ -108,6 +147,27 @@ export function ResourcesPage() {
             <Button onClick={handleUpload} disabled={!uploadFile || !uploadTitle}>
               Submit
             </Button>
+          </div>
+        )}
+
+        {saveError && <p className={styles.error}>{saveError}</p>}
+
+        {recs.length > 0 && !debouncedSearch && !selectedType && (
+          <div className={styles.recommendationsSection}>
+            <h2 className={styles.sectionTitle}>Recommended for You</h2>
+            <div className={styles.recommendationsList}>
+              {recs.map((item) => (
+                <div key={item.id} className={styles.recommendationCard}>
+                  <span className={styles.type}>{item.contentType}</span>
+                  <h3 className={styles.cardTitle}>{item.title}</h3>
+                  {item.uploaderName && <p className={styles.author}>by {item.uploaderName}</p>}
+                  <div className={styles.actions}>
+                    <Button variant="outlined" onClick={() => openFile(item.id)}>Open</Button>
+                    <Button variant="ghost" onClick={() => saveToList(item.id)}>Save</Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

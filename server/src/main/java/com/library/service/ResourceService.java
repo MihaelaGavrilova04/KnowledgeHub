@@ -3,7 +3,6 @@ package com.library.service;
 import com.library.model.dto.ResourceResponse;
 import com.library.model.entity.ContentItem;
 import com.library.model.entity.User;
-import com.library.repository.ContentItemRepository;
 import com.library.repository.UserRepository;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
@@ -59,8 +58,20 @@ public class ResourceService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ResourceResponse> listByType(String contentType, Pageable pageable) {
+        return contentItemRepository.findByIsPublishedTrueAndContentType(contentType, pageable)
+                .map(item -> toResponse(item, getUploaderName(item)));
+    }
+
+    @Transactional(readOnly = true)
     public Page<ResourceResponse> search(String keyword, Pageable pageable) {
         return contentItemRepository.searchPublished(keyword, pageable)
+                .map(item -> toResponse(item, getUploaderName(item)));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ResourceResponse> searchByType(String keyword, String contentType, Pageable pageable) {
+        return contentItemRepository.searchPublishedByType(keyword, contentType, pageable)
                 .map(item -> toResponse(item, getUploaderName(item)));
     }
 

@@ -104,3 +104,69 @@
   margin-top: auto;
   padding-top: var(--gap-s);
 }
+
+.filters {
+  display: flex;
+  gap: var(--gap-xs);
+}
+
+.filter {
+  padding: var(--padding-xs) var(--padding-s);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-small);
+  background: white;
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  color: var(--main-dark-color);
+  cursor: pointer;
+}
+
+.filterActive {
+  padding: var(--padding-xs) var(--padding-s);
+  border: 1px solid var(--primary-accent-color);
+  border-radius: var(--border-radius-small);
+  background: var(--primary-accent-color);
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  color: white;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0;
+  font-family: var(--body-family-font);
+  font-size: var(--body-small-size-font);
+  color: var(--status-error-color);
+}
+
+.recommendationsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--heading-family-font);
+  font-size: var(--h2-size-font);
+  color: var(--main-dark-color);
+}
+
+.recommendationsList {
+  display: flex;
+  gap: var(--gap-l);
+  overflow-x: auto;
+  padding-bottom: var(--padding-xs);
+}
+
+.recommendationCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+  padding: var(--padding-m);
+  border: 1px solid var(--main-placeholder-color);
+  border-radius: var(--border-radius-standard);
+  background: white;
+  min-width: 240px;
+  flex-shrink: 0;
+}

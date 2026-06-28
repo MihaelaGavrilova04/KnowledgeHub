@@ -40,11 +40,20 @@ public class ResourceController {
     @GetMapping
     public ResponseEntity<Page<ResourceResponse>> list(
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String contentType,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        if (keyword != null && !keyword.isBlank()) {
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        boolean hasType = contentType != null && !contentType.isBlank();
+        if (hasKeyword && hasType) {
+            return ResponseEntity.ok(resourceService.searchByType(keyword, contentType, pageable));
+        }
+        if (hasKeyword) {
             return ResponseEntity.ok(resourceService.search(keyword, pageable));
+        }
+        if (hasType) {
+            return ResponseEntity.ok(resourceService.listByType(contentType, pageable));
         }
         return ResponseEntity.ok(resourceService.listAll(pageable));
     }
