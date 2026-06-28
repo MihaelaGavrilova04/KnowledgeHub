@@ -59,8 +59,20 @@ public class ResourceService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ResourceResponse> listByType(String contentType, Pageable pageable) {
+        return contentItemRepository.findByIsPublishedTrueAndContentType(contentType, pageable)
+                .map(item -> toResponse(item, getUploaderName(item)));
+    }
+
+    @Transactional(readOnly = true)
     public Page<ResourceResponse> search(String keyword, Pageable pageable) {
         return contentItemRepository.searchPublished(keyword, pageable)
+                .map(item -> toResponse(item, getUploaderName(item)));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ResourceResponse> searchByType(String keyword, String contentType, Pageable pageable) {
+        return contentItemRepository.searchPublishedByType(keyword, contentType, pageable)
                 .map(item -> toResponse(item, getUploaderName(item)));
     }
 
