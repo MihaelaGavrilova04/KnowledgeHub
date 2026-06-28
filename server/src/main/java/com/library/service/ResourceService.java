@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.model.dto.ResourceResponse;
 import com.library.model.entity.ContentItem;
 import com.library.model.entity.User;
+import com.library.repository.ContentItemRepository;
 import com.library.repository.UserRepository;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
