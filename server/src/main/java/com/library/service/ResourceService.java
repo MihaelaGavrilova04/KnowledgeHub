@@ -78,9 +78,26 @@ public class ResourceService {
         validateFile(file);
 
         User uploader = userRepository.findByEmail(email).orElseThrow();
-        UUID uploaderId = uploader.getId();
+        String key = uploader.getId() + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        String key = uploaderId + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+        uploadToMinio(file, key);
+
+        ContentItem item = ContentItem.builder()
+                .title(title)
+                .description(description)
+                .contentType(contentType)
+                .authorId(uploader.getId())
+                .uploadedBy(uploader.getId())
+                .minioKey(key)
+                .isPublished(true)
+                .views(0L)
+                .version(1)
+                .build();
+
+        return toResponse(contentItemRepository.save(item), uploader.getName());
+    }
+
+    private void uploadToMinio(MultipartFile file, String key) {
         try {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
@@ -89,22 +106,8 @@ public class ResourceService {
                     .contentType(file.getContentType())
                     .build());
         } catch (Exception e) {
-            throw new IllegalStateException("File upload failed");
+            throw new IllegalStateException("File upload failed", e);
         }
-
-        ContentItem item = ContentItem.builder()
-                .title(title)
-                .description(description)
-                .contentType(contentType)
-                .authorId(uploaderId)
-                .uploadedBy(uploaderId)
-                .minioKey(key)
-                .isPublished(true)
-                .views(0L)
-                .version(1)
-                .build();
-        ContentItem saved = contentItemRepository.save(item);
-        return toResponse(saved, uploader.getName());
     }
 
     @Transactional(readOnly = true)
