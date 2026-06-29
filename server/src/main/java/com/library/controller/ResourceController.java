@@ -1,7 +1,6 @@
 package com.library.controller;
 
 import com.library.model.dto.ResourceResponse;
-import com.library.repository.UserRepository;
 import com.library.service.ResourceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,11 +29,8 @@ public class ResourceController {
 
     private final ResourceService resourceService;
 
-    private final UserRepository userRepository;
-
-    public ResourceController(ResourceService resourceService, UserRepository userRepository) {
+    public ResourceController(ResourceService resourceService) {
         this.resourceService = resourceService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -65,9 +61,8 @@ public class ResourceController {
             @RequestParam(required = false) String description,
             @RequestParam(required = false, defaultValue = "OTHER") String contentType,
             Authentication authentication) {
-        UUID uploaderId = getUserId(authentication);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(resourceService.upload(file, title, description, contentType, uploaderId));
+                .body(resourceService.upload(file, title, description, contentType, authentication.getName()));
     }
 
     @GetMapping("/{id}/download")
@@ -82,11 +77,7 @@ public class ResourceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
-        resourceService.delete(id, getUserId(authentication));
+        resourceService.delete(id, authentication.getName());
         return ResponseEntity.noContent().build();
-    }
-
-    private UUID getUserId(Authentication authentication) {
-        return userRepository.findByEmail(authentication.getName()).orElseThrow().getId();
     }
 }
