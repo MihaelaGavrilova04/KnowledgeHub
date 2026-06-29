@@ -26,9 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class ResourceService {
 
     private static final int PRESIGNED_URL_EXPIRY_MINUTES = 5;
-
     private static final String DISPOSITION_PARAM = "response-content-disposition";
-
     private static final List<String> ALLOWED_TYPES = List.of(
             "application/pdf",
             "application/epub+zip",
@@ -39,9 +37,7 @@ public class ResourceService {
     private String bucketName;
 
     private final MinioClient minioClient;
-
     private final ContentItemRepository contentItemRepository;
-
     private final UserRepository userRepository;
 
     public ResourceService(MinioClient minioClient,
@@ -78,8 +74,12 @@ public class ResourceService {
 
     @Transactional
     public ResourceResponse upload(MultipartFile file, String title, String description,
-                                   String contentType, UUID uploaderId) {
+                                   String contentType, String email) {
         validateFile(file);
+
+        User uploader = userRepository.findByEmail(email).orElseThrow();
+        UUID uploaderId = uploader.getId();
+
         String key = uploaderId + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
         try {
             minioClient.putObject(PutObjectArgs.builder()
@@ -91,7 +91,7 @@ public class ResourceService {
         } catch (Exception e) {
             throw new IllegalStateException("File upload failed");
         }
-        User uploader = userRepository.findById(uploaderId).orElseThrow();
+
         ContentItem item = ContentItem.builder()
                 .title(title)
                 .description(description)
@@ -142,9 +142,12 @@ public class ResourceService {
     }
 
     @Transactional
-    public void delete(UUID resourceId, UUID requesterId) {
+    public void delete(UUID resourceId, String email) {
         ContentItem item = contentItemRepository.findById(resourceId).orElseThrow();
-        User requester = userRepository.findById(requesterId).orElseThrow();
+
+        User requester = userRepository.findByEmail(email).orElseThrow();
+        UUID requesterId = requester.getId();
+
         boolean isOwner = item.getUploadedBy().equals(requesterId);
         boolean isAdmin = "ADMIN".equals(requester.getRole());
         if (!isOwner && !isAdmin) {
