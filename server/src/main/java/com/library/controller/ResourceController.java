@@ -65,9 +65,9 @@ public class ResourceController {
                 .body(resourceService.upload(file, title, description, contentType, authentication.getName()));
     }
 
-    @GetMapping("/{id}/download")
-    public ResponseEntity<Map<String, String>> download(@PathVariable UUID id) {
-        return ResponseEntity.ok(Map.of("url", resourceService.getDownloadUrl(id)));
+    @GetMapping("/{id}/preview")
+    public ResponseEntity<Map<String, String>> preview(@PathVariable UUID id) {
+        return ResponseEntity.ok(Map.of("url", resourceService.getPreviewUrl(id)));
     }
 
     @GetMapping("/{id}/file")
