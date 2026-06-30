@@ -9,6 +9,8 @@ import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
+import io.minio.StatObjectArgs;
+import io.minio.StatObjectResponse;
 import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -20,12 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class ResourceService {
 
-    private static final int PRESIGNED_URL_EXPIRY_MINUTES = 5;
+    private static final int PRESIGNED_URL_EXPIRY_SECONDS = 300;
     private static final String DISPOSITION_PARAM = "response-content-disposition";
     private static final List<String> ALLOWED_TYPES = List.of(
             "application/pdf",
@@ -111,17 +112,30 @@ public class ResourceService {
     }
 
     @Transactional(readOnly = true)
-    public String getDownloadUrl(UUID resourceId) {
+    public String getPreviewUrl(UUID resourceId) {
         ContentItem item = contentItemRepository.findById(resourceId).orElseThrow();
+        String minioKey = item.getMinioKey();
+        String filenamePart = minioKey.substring(minioKey.lastIndexOf('/') + 1);
+        String filename = filenamePart.substring(filenamePart.indexOf('_') + 1);
         try {
+            StatObjectResponse stat = minioClient.statObject(StatObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(minioKey)
+                    .build());
+            String originalContentType = stat.contentType();
+
             return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(bucketName)
-                    .object(item.getMinioKey())
+                    .object(minioKey)
                     .method(Method.GET)
-                    .expiry(PRESIGNED_URL_EXPIRY_MINUTES, TimeUnit.MINUTES)
+                    .expiry(PRESIGNED_URL_EXPIRY_SECONDS)
+                    .extraQueryParams(Map.of(
+                            DISPOSITION_PARAM, "inline; filename=\"" + filename + "\"",
+                            "response-content-type", originalContentType
+                    ))
                     .build());
         } catch (Exception e) {
-            throw new IllegalStateException("Could not generate download URL");
+            throw new IllegalStateException("Could not generate preview URL");
         }
     }
 
@@ -136,8 +150,10 @@ public class ResourceService {
                     .bucket(bucketName)
                     .object(minioKey)
                     .method(Method.GET)
-                    .expiry(PRESIGNED_URL_EXPIRY_MINUTES, TimeUnit.MINUTES)
-                    .extraQueryParams(Map.of(DISPOSITION_PARAM, "attachment; filename=\"" + filename + "\""))
+                    .expiry(PRESIGNED_URL_EXPIRY_SECONDS)
+                    .extraQueryParams(Map.of(
+                            DISPOSITION_PARAM, "attachment; filename=\"" + filename + "\""
+                    ))
                     .build());
         } catch (Exception e) {
             throw new IllegalStateException("Could not generate file download URL");
